@@ -33,10 +33,12 @@ dependencies {
 * register module (in MainActivity.java)
 
 ```java
+...
+import me.sneer.react.SneerPackage;      // <-------
+...
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
 
-  ...
  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
       .setApplication(getApplication())
       ...
       .addPackage(new MainReactPackage())
-      .addPackage(new SneerPackage(this))      // <------- this line
+      .addPackage(new SneerPackage(this))      // <-------
       ...
       .build();
 
