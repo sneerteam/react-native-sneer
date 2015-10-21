@@ -1,4 +1,4 @@
-package com.reactactoe;
+package me.sneer.react;
 
 import android.app.Activity;
 import android.util.Log;
