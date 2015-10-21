@@ -1,0 +1,23 @@
+{
+  "name": "react-native-sneer",
+  "description": "A react native android module to talk with the Sneer api.",
+  "version": "0.1.0",
+  "main": "index.android.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sneerteam/react-native-sneer.git"
+  },
+  "keywords": [
+    "react-component",
+    "react-native",
+    "android",
+    "sneer",
+    "snapi"
+  ],
+  "author": "Felipe Bueno <bueno.felipe@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/sneerteam/react-native-sneer",
+  "peerDependencies": {
+    "react-native": "^0.12.0"
+  }
+}
