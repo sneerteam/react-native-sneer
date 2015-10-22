@@ -12,7 +12,10 @@
     "react-native",
     "android",
     "sneer",
-    "snapi"
+    "snapi",
+    "react-component",
+    "react-native",
+    "android"
   ],
   "author": "Felipe Bueno <bueno.felipe@gmail.com>",
   "license": "MIT",
