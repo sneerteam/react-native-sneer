@@ -2,7 +2,6 @@ package me.sneer.react;
 
 import android.app.Activity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -10,7 +9,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +22,10 @@ import sneer.android.ui.SneerInstallation;
 
 public class SneerModule extends ReactContextBaseJavaModule {
 
+  private final String TAG = getClass().getSimpleName();
+
   private static PartnerSession session;
 
-  private static final String DURATION_SHORT_KEY = "SHORT";
-  private static final String DURATION_LONG_KEY = "LONG";
   private Activity activity;
 
   public SneerModule(ReactApplicationContext reactContext, Activity activity) {
@@ -41,9 +40,8 @@ public class SneerModule extends ReactContextBaseJavaModule {
 
   @Override
   public Map<String, Object> getConstants() {
-    final Map<String, Object> constants = new HashMap<>();
-    constants.put(DURATION_SHORT_KEY, Toast.LENGTH_SHORT);
-    constants.put(DURATION_LONG_KEY, Toast.LENGTH_LONG);
+    Map<String, Object> constants = new HashMap<>();
+    // none
     return constants;
   }
 
@@ -54,10 +52,10 @@ public class SneerModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void join() {
-    Log.d("TICTACTOE", "SneerModule.join: " + session);
+    Log.i(TAG, "SneerModule.join: " + session);
     if (session != null)
       return;
-    session = PartnerSession.join(activity, new PartnerSession.Listener() {  /////////////Sneer API call
+    session = PartnerSession.join(activity, new PartnerSession.Listener() {
       @Override
       public void onUpToDate() {
         sendEvent("upToDate", null);
@@ -75,7 +73,7 @@ public class SneerModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void close() {
-    Log.d("TICTACTOE", "SneerModule.close: " + session);
+    Log.i(TAG, "SneerModule.close: " + session);
     if (session != null) {
       session.close();
       session = null;
@@ -87,15 +85,9 @@ public class SneerModule extends ReactContextBaseJavaModule {
     session.send(o);
   }
 
-  @ReactMethod
-  public void toast(String message, int duration) {
-    Toast.makeText(getReactApplicationContext(), message, duration).show();
-  }
-
-  private void sendEvent(String eventName,
-                         @Nullable WritableMap params) {
+  private void sendEvent(String eventName, @Nullable WritableMap params) {
     getReactApplicationContext()
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .getJSModule(RCTDeviceEventEmitter.class)
             .emit(eventName, params);
   }
 }

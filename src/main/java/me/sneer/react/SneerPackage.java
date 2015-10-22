@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SneerPackage implements ReactPackage {
+
+	private final String TAG = getClass().getSimpleName();
+
 	private final Activity activity;
 
 	public SneerPackage(Activity activity) {
@@ -21,8 +24,7 @@ public class SneerPackage implements ReactPackage {
 
 	@Override
 	public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-		Log.d("TICTACTOE", "createNativeModules");
-
+		Log.i(TAG, "createNativeModules");
 		List<NativeModule> modules = new ArrayList<>();
 		modules.add(new SneerModule(reactContext, activity));
 		return modules;
