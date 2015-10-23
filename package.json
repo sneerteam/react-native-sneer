@@ -1,7 +1,7 @@
 {
   "name": "react-native-sneer",
   "description": "A react native android module to talk with the Sneer api.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "index.android.js",
   "repository": {
     "type": "git",
@@ -21,6 +21,6 @@
   "license": "MIT",
   "homepage": "https://github.com/sneerteam/react-native-sneer",
   "peerDependencies": {
-    "react-native": "^0.12.0"
+    "react-native": "^0.13.0"
   }
 }
