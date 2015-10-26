@@ -22,78 +22,76 @@ import sneer.android.ui.SneerInstallation;
 
 public class SneerModule extends ReactContextBaseJavaModule {
 
-  private final String TAG = getClass().getSimpleName();
+	private static PartnerSession session;
+	private final String TAG = getClass().getSimpleName();
+	private Activity activity;
 
-  private static PartnerSession session;
+	public SneerModule(ReactApplicationContext reactContext, Activity activity) {
+		super(reactContext);
+		this.activity = activity;
+	}
 
-  private Activity activity;
+	@Override
+	public String getName() {
+		return "Sneer";
+	}
 
-  public SneerModule(ReactApplicationContext reactContext, Activity activity) {
-    super(reactContext);
-    this.activity = activity;
-  }
+	@Override
+	public Map<String, Object> getConstants() {
+		Map<String, Object> constants = new HashMap<>();
+		// none
+		return constants;
+	}
 
-  @Override
-  public String getName() {
-    return "Sneer";
-  }
+	@ReactMethod
+	public void wasCalledFromConversation(Callback cb) {
+		cb.invoke(SneerInstallation.wasCalledFromConversation(activity));
+	}
 
-  @Override
-  public Map<String, Object> getConstants() {
-    Map<String, Object> constants = new HashMap<>();
-    // none
-    return constants;
-  }
+	@ReactMethod
+	public void join() {
+		Log.i(TAG, "SneerModule.join: " + session);
+		if (session != null)
+			return;
+		session = PartnerSession.join(activity, new PartnerSession.Listener() {
+			@Override
+			public void onUpToDate() {
+				sendEvent("upToDate", null);
+			}
 
-  @ReactMethod
-  public void wasCalledFromConversation(Callback cb) {
-    cb.invoke(SneerInstallation.wasCalledFromConversation(activity));
-  }
+			@Override
+			public void onMessage(Message message) {
+				WritableMap map = Arguments.createMap();
+				map.putBoolean("wasSentByMe", message.wasSentByMe());
+				map.putString("payload", (String) message.payload());
+				sendEvent("message", map);
+			}
+		});
+	}
 
-  @ReactMethod
-  public void join() {
-    Log.i(TAG, "SneerModule.join: " + session);
-    if (session != null)
-      return;
-    session = PartnerSession.join(activity, new PartnerSession.Listener() {
-      @Override
-      public void onUpToDate() {
-        sendEvent("upToDate", null);
-      }
+	@ReactMethod
+	public void close() {
+		Log.i(TAG, "SneerModule.close: " + session);
+		if (session != null) {
+			session.close();
+			session = null;
+		}
+	}
 
-      @Override
-      public void onMessage(Message message) {
-        WritableMap map = Arguments.createMap();
-        map.putBoolean("wasSentByMe", message.wasSentByMe());
-        map.putString("payload", (String) message.payload());
-        sendEvent("message", map);
-      }
-    });
-  }
+	@ReactMethod
+	public void finish() {
+		activity.finish();
+	}
 
-  @ReactMethod
-  public void close() {
-    Log.i(TAG, "SneerModule.close: " + session);
-    if (session != null) {
-      session.close();
-      session = null;
-    }
-  }
+	@ReactMethod
+	public void send(final String o) {
+		session.send(o);
+	}
 
-  @ReactMethod
-  public void finish() {
-    activity.finish();
-  }
-
-  @ReactMethod
-  public void send(final String o) {
-    session.send(o);
-  }
-
-  private void sendEvent(String eventName, @Nullable WritableMap params) {
-    getReactApplicationContext()
-            .getJSModule(RCTDeviceEventEmitter.class)
-            .emit(eventName, params);
-  }
+	private void sendEvent(String eventName, @Nullable WritableMap params) {
+		getReactApplicationContext()
+				.getJSModule(RCTDeviceEventEmitter.class)
+				.emit(eventName, params);
+	}
 
 }
