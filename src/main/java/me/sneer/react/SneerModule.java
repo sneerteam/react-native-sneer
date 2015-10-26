@@ -81,6 +81,11 @@ public class SneerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void finish() {
+    activity.finish();
+  }
+
+  @ReactMethod
   public void send(final String o) {
     session.send(o);
   }
@@ -90,4 +95,5 @@ public class SneerModule extends ReactContextBaseJavaModule {
             .getJSModule(RCTDeviceEventEmitter.class)
             .emit(eventName, params);
   }
+
 }
