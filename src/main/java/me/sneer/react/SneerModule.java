@@ -49,6 +49,11 @@ public class SneerModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
+	public boolean wasStartedByMe() {
+		return session.wasStartedByMe();
+	}
+
+	@ReactMethod
 	public void join() {
 		Log.i(TAG, "SneerModule.join: " + session);
 		if (session != null)
