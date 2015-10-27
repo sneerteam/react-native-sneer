@@ -25,6 +25,7 @@ public class SneerModule extends ReactContextBaseJavaModule {
 	private static PartnerSession session;
 	private final String TAG = getClass().getSimpleName();
 	private Activity activity;
+	private static boolean wasStartedByMe;
 
 	public SneerModule(ReactApplicationContext reactContext, Activity activity) {
 		super(reactContext);
@@ -45,12 +46,12 @@ public class SneerModule extends ReactContextBaseJavaModule {
 
 	@ReactMethod
 	public void wasCalledFromConversation(Callback cb) {
-		cb.invoke(SneerInstallation.wasCalledFromConversation(activity));
+		cb.invoke(SneerInstallation.checkConversationContext(activity));
 	}
 
 	@ReactMethod
-	public boolean wasStartedByMe() {
-		return session.wasStartedByMe();
+	public void wasStartedByMe(Callback cb) {
+		cb.invoke(wasStartedByMe);
 	}
 
 	@ReactMethod
@@ -72,6 +73,7 @@ public class SneerModule extends ReactContextBaseJavaModule {
 				sendEvent("message", map);
 			}
 		});
+		wasStartedByMe = session.wasStartedByMe();
 	}
 
 	@ReactMethod
